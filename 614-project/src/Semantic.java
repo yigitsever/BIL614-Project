@@ -33,6 +33,7 @@ public class Semantic {
 	public static void main(String[] args) {
 		Semantic s = new Semantic("");
 		//s.findSemanticVariables();
+		s.findNER("Cumhurbaşkanı");
 	}
 
 	public ArrayList<Integer> semanticVariables = null;
@@ -42,7 +43,7 @@ public class Semantic {
 		semanticVariables = new ArrayList<>();
 	}
 	
-	public ArrayList<ArrayList<Integer>> findSemanticVariables()
+	public ArrayList<ArrayList<Integer>> findSemanticVariables(OutputDelegate outSemanticVariables)
 	{
 		ArrayList<ArrayList<Integer>> allResults = new ArrayList<>();
 		
@@ -62,13 +63,13 @@ public class Semantic {
 
 		}
 		for (String folder : folders) {
-
+			HashMap<String,String> nerHash = new HashMap<>();
 			File[] folderFiles = new File(folder).listFiles();
 			for (File folderFile : folderFiles) {
 				if (!folderFile.isHidden()) {
 					ArrayList<Integer> results = new ArrayList<>();
 					
-					System.out.println(folderFile.getAbsolutePath());
+					System.err.println(folderFile.getAbsolutePath());
 					
 					InputDelegate inputDelegate = new InputDelegate(folderFile.getAbsolutePath());
 					inputDelegate.openFile();
@@ -96,7 +97,27 @@ public class Semantic {
 
 							word = Manager.stemmIt(word);
 							
-							String ner = findNER(word);
+							if (Manager.stopWords.contains(word)) {
+								continue;
+							}
+							
+							String ner = "";
+							
+							//System.out.println(";"+word);
+							
+							if(nerHash.containsKey(word))
+							{
+								ner = nerHash.get(word);
+							}
+							else
+							{
+								ner = findNER(word);
+								nerHash.put(word, ner);
+							}
+							
+							 
+							
+							
 							
 							if( ner == null)
 							{
@@ -125,6 +146,8 @@ public class Semantic {
 					results.add(locCount);
 					
 					allResults.add(results);
+					
+					outSemanticVariables.write("Person="+personCount+" Organization="+orgCount+ " Location="+locCount);
 				}
 			}
 		}
@@ -134,7 +157,6 @@ public class Semantic {
 
 	public String findNER(String word) {
 		String input = word;
-		
 		RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(2 * 1000).build();
 
 
@@ -151,27 +173,36 @@ public class Semantic {
 			HttpResponse resp = client.execute(post);
 
 			String response = EntityUtils.toString(resp.getEntity());
+			
+			//System.out.println(response);
 
 			String[] rArr = response.split("\\n");
 
 			parameters.set(0, new BasicNameValuePair("tool", "ner"));
+			
+			String nerInput = input +" " + rArr[0];
 
-			for (String line : rArr) {
-				parameters.set(1, new BasicNameValuePair("input", input + " " + line));
+			for(int i=1;i < rArr.length ; i++)
+			{
+				nerInput += "\n" + input +" " +rArr[i];
+			}
+			
+			//System.out.println(nerInput);
+			
+			parameters.set(1, new BasicNameValuePair("input", nerInput));
 
-				post.setEntity(new UrlEncodedFormEntity(parameters, "UTF-8"));
-				resp = client.execute(post);
-				
-				response = EntityUtils.toString(resp.getEntity());
-				System.out.println(response);
-				if (response.toLowerCase().contains("person")) {
-					return "person";
-				} else if (response.toLowerCase().contains("orga")) {
-					return "organization";
-				} else if (response.toLowerCase().contains("loc")) {
-					return "location";
-				}
-
+			post.setEntity(new UrlEncodedFormEntity(parameters, "UTF-8"));
+			resp = client.execute(post);
+			
+			response = EntityUtils.toString(resp.getEntity());
+			
+			//System.out.println(response);
+			if (response.toLowerCase().contains("person")) {
+				return "person";
+			} else if (response.toLowerCase().contains("orga")) {
+				return "organization";
+			} else if (response.toLowerCase().contains("loc")) {
+				return "location";
 			}
 
 			//System.out.println(response);
