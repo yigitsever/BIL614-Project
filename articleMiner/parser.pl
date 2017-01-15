@@ -38,6 +38,7 @@ for my $row (@dataRows) {
 
 	my @urlPair = split ",", $row;
 	my $url = $urlPair[1];
+	my $lastResort = $urlPair[0];
 	my $content = get($url);
 
 	if ( not defined $content ) {
@@ -46,21 +47,25 @@ for my $row (@dataRows) {
 	}
 
 	my $month;
-	if ($content =~ /<div class=\"date\">\d+\.0?(1[0-2]|[0-9])\./) { # Numeric
-		### Found month: $1
+	if ($content =~ /<div class=\"date\">\d+\.0?(1[0-2]|[0-9])\./) { # Numeric, gundem
+		# Found month: $1
 		$month = $months{$1};
-	} elsif ($content =~ /<div class=\"dt\">\d+ (.+?) \d+/) { # Textual
+	} elsif ($content =~ /<div class=\"(?:dt|date)\">\d+ (.+?) \d+/) { # Textual, yerel spor
 		my $testString = $1;
 		chomp $testString;
-		### for: $testString
-		$month = $1;
+		# for: $testString
+		$month = lc $1;
+	} elsif ($content =~ /<em class=\"_b ntime\"><\/em>\s?\d+\.0?(1[0-2]|[0-9])\./) { # siyaset
+		$month = $months{$1};
+	} elsif ($lastResort =~ /eksisozluk\.com\/\d+-(\w+)-/) {
+		# haber icerisinde yayinlanma tarihi yok/cok sacma bir yerde
+		$month = $months{$1};
 	} else {
 		### Does not work for: $url
-		$month = "fuckers";
 	}
 
 	# Find month, create directory if not exist
-	my $articleOutputFile = "$month/$success";
+	my $articleOutputFile = "temp/$month/$success";
 	my $dir = dirname($articleOutputFile);
 
 	unless ( -d $dir ) { # no exists
@@ -121,14 +126,20 @@ sub removeTags {
 __DATA__
 0 null
 1 ocak
-2 subat
+2 şubat
 3 mart
 4 nisan
-5 mayis
+5 mayıs
 6 haziran
 7 temmuz
-8 agustos
-9 eylul
+8 ağustos
+9 eylül
 10 ekim
-11 kasim
-12 aralik
+11 kasım
+12 aralık
+subat şubat
+mayis mayıs
+agustos ağustos
+eylul eylül
+kasim kasım
+aralik aralık
