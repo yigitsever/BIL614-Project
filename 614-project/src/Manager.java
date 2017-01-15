@@ -20,54 +20,62 @@ public class Manager {
 		
 	}
 	
-	public void execute()
+	public void execute(boolean useOutputs)
 	{
-		findStopWords();
 		
-		Textual textualFeatures = new Textual(trainFolder); 
-		Semantic semanticFeatures = new Semantic(trainFolder);
-		
-		ArrayList<String> mostCommonTerms = textualFeatures.findMostCommonTerms(100);
-		
-		OutputDelegate outMostCommon = new OutputDelegate("MostCommonTerms.txt");
-		
-		for(String mct : mostCommonTerms)
+		if(useOutputs == false )
 		{
-			outMostCommon.write(mct);
-			outMostCommon.newLine();
+
+			findStopWords();
+			
+			Textual textualFeatures = new Textual(trainFolder); 
+			Semantic semanticFeatures = new Semantic(trainFolder);
+			
+			ArrayList<String> mostCommonTerms = textualFeatures.findMostCommonTerms(100);
+			
+			OutputDelegate outMostCommon = new OutputDelegate("MostCommonTerms.txt");
+			
+			for(String mct : mostCommonTerms)
+			{
+				outMostCommon.write(mct);
+				outMostCommon.newLine();
+			}
+			
+			outMostCommon.stop();
+			
+			ArrayList<Integer> termFrequenciesForFile = textualFeatures.findTermFrequencies();
+			
+			OutputDelegate outTermFrequencies = new OutputDelegate("TermFrequencies.txt");
+			
+			for(int tf : termFrequenciesForFile )
+			{
+				outTermFrequencies.write(tf+""); 
+				outTermFrequencies.newLine();
+			}
+			
+			outTermFrequencies.stop();
+			
+			OutputDelegate outSemanticVariables = new OutputDelegate("SemanticVariables.txt");
+			
+			ArrayList<ArrayList<Integer>> semanticVariables = semanticFeatures.findSemanticVariables(outSemanticVariables);
+			
+			outSemanticVariables.stop();
+			
+			/*
+			for(ArrayList<Integer> sem : semanticVariables )
+			{
+				outSemanticVariables.write("Person="+sem.get(0)+" Organization="+sem.get(1) + " Location="+sem.get(2));
+				outSemanticVariables.newLine();
+			}
+			
+			outSemanticVariables.stop();*/
+		}
+		else
+		{
+			
 		}
 		
-		outMostCommon.stop();
 		
-		ArrayList<Integer> termFrequenciesForFile = textualFeatures.findTermFrequencies();
-		
-		OutputDelegate outTermFrequencies = new OutputDelegate("TermFrequencies.txt");
-		
-		for(int tf : termFrequenciesForFile )
-		{
-			outTermFrequencies.write(tf+""); 
-			outTermFrequencies.newLine();
-		}
-		
-		outTermFrequencies.stop();
-		
-		
-		
-		/*
-		 * 
-		 * ArrayList<ArrayList<Integer>> semanticVariables = semanticFeatures.findSemanticVariables();
-		
-		OutputDelegate outSemanticVariables = new OutputDelegate("SemanticVariables.txt");
-		
-		for(ArrayList<Integer> sem : semanticVariables )
-		{
-			outSemanticVariables.write("Person="+sem.get(0)+" Organization="+sem.get(1) + " Location="+sem.get(2));
-			outSemanticVariables.newLine();
-		}
-		
-		outSemanticVariables.stop();
-		
-		*/
 	}
 	
 	private void findStopWords() {
