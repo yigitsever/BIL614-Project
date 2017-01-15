@@ -70,14 +70,71 @@ public class Manager {
 			
 			outSemanticVariables.stop();*/
 		}
-		else
+		
+		prepareTreeData("TermFrequencies.txt","SemanticVariables.txt","TreeData.txt");
+		
+		
+		RandomForestRunner rfRunner = new RandomForestRunner("TreeData.txt","TestData.txt");
+		
+		ArrayList<ArrayList<String>> rfResults = rfRunner.run();
+		
+		OutputDelegate outRFResults = new OutputDelegate("RandomForestResults.txt");
+		
+		for(ArrayList<String> rfResult : rfResults)
 		{
-			
+			outRFResults.write(rfResult.get(1) +" " + rfResult.get(0));
+			outRFResults.newLine();
 		}
+		
+		outRFResults.stop();
 		
 		
 	}
 	
+	private void prepareTreeData(String termFrequenciesFile, String semanticVariablesFiles, String treeDataFile) {
+		InputDelegate termFile = new InputDelegate(termFrequenciesFile);
+		InputDelegate semanticFile = new InputDelegate(semanticVariablesFiles);
+		OutputDelegate treeFile = new OutputDelegate(treeDataFile);
+		
+		termFile.openFile();
+		semanticFile.openFile();
+		
+		
+		String lineTerm = termFile.readFile();
+		String lineSem = semanticFile.readFile();
+		
+		while(lineTerm != null)
+		{
+			treeFile.write(lineTerm);
+			treeFile.write(",");
+			
+			lineSem = lineSem.replaceAll("Person=", "");
+			lineSem = lineSem.replace("Organization=", "");
+			lineSem = lineSem.replaceAll("Location=", "");
+			
+			String[] temp = lineSem.split("\\s+");
+			
+			treeFile.write(temp[0]);
+			treeFile.write(",");
+			treeFile.write(temp[1]);
+			treeFile.write(",");
+			treeFile.write(temp[2]);
+			treeFile.write(",");
+			treeFile.write("yes");
+			
+			lineTerm = termFile.readFile();
+			lineSem = semanticFile.readFile();
+			
+			treeFile.newLine();
+		}
+		
+		treeFile.stop();
+		termFile.closeFile();
+		semanticFile.closeFile();
+		
+		
+	}
+
 	private void findStopWords() {
 		InputDelegate idel = new InputDelegate("stopWords.txt");
 		

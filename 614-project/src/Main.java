@@ -16,7 +16,7 @@ public class Main {
 		//TODO using RF find popular or not
 		
 		Manager man = new Manager("/Users/erantoker/Documents/workspace/614-project/popular/");
-		man.execute();
+		man.execute(true);
 		
 		/*Stemmer stemmer = Resha.Instance;
 
