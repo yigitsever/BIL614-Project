@@ -47,6 +47,8 @@ for my $row (@dataRows) {
 	}
 
 	my $month;
+
+
 	if ($content =~ /<div class=\"date\">\d+\.0?(1[0-2]|[0-9])\./) { # Numeric, gundem
 		# Found month: $1
 		$month = $months{$1};
@@ -64,8 +66,7 @@ for my $row (@dataRows) {
 		### Does not work for: $url
 	}
 
-	# Find month, create directory if not exist
-	my $articleOutputFile = "temp/$month/$success";
+	my $articleOutputFile = "data/$month/$success";
 	my $dir = dirname($articleOutputFile);
 
 	unless ( -d $dir ) { # no exists
@@ -81,6 +82,8 @@ for my $row (@dataRows) {
 		$parsedText .= lc " $1  ";
 	} elsif ($content =~ /<div class=\"baslik-spot\">(.+?)<\/div>/i) {	# Spor
 		$parsedText .= lc " $1 ";
+	} elsif ($content =~ /<h1>(.+?)<\/h2>/i) { # magazin
+		$parsedText .= lc " $1 ";
 	} else {
 		# No headline found for: $url
 	}
@@ -90,13 +93,15 @@ for my $row (@dataRows) {
 		$parsedText .= lc " $1 ";
 	} else {
 		# No subheadline found for: $url
-		# Also we handled sub-headline for Spor at headline
+		# Also we handled sub-headline for Spor, magazin at headline
 	}
 
 	#-> articleBody #
 	if ($content =~ /<div itemprop=\"articleBody\">(.+?)<\/div>/i) { # Gundem
 		$parsedText .= lc " $1 ";
 	} elsif ($content =~ /<div id=\"divAdnetKeyword3\" class=\"text\" itemprop=\"articleBody\">/i) {
+		$parsedText .= lc " $1 ";
+	} elsif ($content =~ /<div id=\"divAdnetKeyword3\" class=\"article\">(.+?)<\/div>/) {
 		$parsedText .= lc " $1 ";
 	} else {
 		# $parsedText = $url . "\t<===";
@@ -137,9 +142,15 @@ __DATA__
 10 ekim
 11 kasım
 12 aralık
+ocak ocak
 subat şubat
+mart mart
+nisan nisan
 mayis mayıs
+haziran haziran
+temmuz temmuz
 agustos ağustos
 eylul eylül
+ekim ekim
 kasim kasım
 aralik aralık
