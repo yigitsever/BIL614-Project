@@ -9,13 +9,18 @@ public class Manager {
 	public static Stemmer stemmer = null;
 	
 	private String trainFolder = "";
+	private String testFolder = "";
 	
-	public Manager(String trainFolder)
+	private int nonePopularResults = 0 ;
+	
+	public Manager(String trainFolder, String testFolder,int nonePopularResults)
 	{
 		stopWords = new ArrayList<>();
 		stemmer = Resha.Instance;
 		
 		this.trainFolder = trainFolder;
+		this.testFolder = testFolder;
+		this.nonePopularResults = nonePopularResults;
 		
 		
 	}
@@ -61,17 +66,35 @@ public class Manager {
 			
 			outSemanticVariables.stop();
 			
-			/*
-			for(ArrayList<Integer> sem : semanticVariables )
+			//here comes to test data
+			
+			textualFeatures.setTrainFolder(testFolder);
+			ArrayList<Integer> testTermFrequenciesForFile = textualFeatures.findTermFrequencies();
+			
+			OutputDelegate outTestTermFrequencies = new OutputDelegate("TestTermFrequencies.txt");
+			
+			for(int tf : testTermFrequenciesForFile )
 			{
-				outSemanticVariables.write("Person="+sem.get(0)+" Organization="+sem.get(1) + " Location="+sem.get(2));
-				outSemanticVariables.newLine();
+				outTestTermFrequencies.write(tf+""); 
+				outTestTermFrequencies.newLine();
 			}
 			
-			outSemanticVariables.stop();*/
+			outTestTermFrequencies.stop();
+			
+			OutputDelegate outTestSemanticVariables = new OutputDelegate("TestSemanticVariables.txt");
+			
+			Semantic testSemanticFeatures = new Semantic(testFolder);
+			
+			ArrayList<ArrayList<Integer>> testSemanticVariables = testSemanticFeatures.findSemanticVariables(outTestSemanticVariables);
+			
+			outTestSemanticVariables.stop();
+			
+			
 		}
 		
 		prepareTreeData("TermFrequencies.txt","SemanticVariables.txt","TreeData.txt");
+		prepareTestTreeData("TestTermFrequencies.txt","TestSemanticVariables.txt","TestData.txt");
+		
 		
 		
 		RandomForestRunner rfRunner = new RandomForestRunner("TreeData.txt","TestData.txt");
@@ -91,6 +114,49 @@ public class Manager {
 		
 	}
 	
+	private void prepareTestTreeData(String termFrequenciesFile, String semanticVariablesFiles, String treeDataFile) {
+		InputDelegate termFile = new InputDelegate(termFrequenciesFile);
+		InputDelegate semanticFile = new InputDelegate(semanticVariablesFiles);
+		OutputDelegate treeFile = new OutputDelegate(treeDataFile);
+		
+		termFile.openFile();
+		semanticFile.openFile();
+		
+		
+		String lineTerm = termFile.readFile();
+		String lineSem = semanticFile.readFile();
+		
+		
+		while(lineTerm != null)
+		{
+			treeFile.write(lineTerm);
+			treeFile.write(",");
+			
+			lineSem = lineSem.replaceAll("Person=", "");
+			lineSem = lineSem.replace("Organization=", "");
+			lineSem = lineSem.replaceAll("Location=", "");
+			
+			String[] temp = lineSem.split("\\s+");
+			
+			treeFile.write(temp[0]);
+			treeFile.write(",");
+			treeFile.write(temp[1]);
+			treeFile.write(",");
+			treeFile.write(temp[2]);
+			
+			lineTerm = termFile.readFile();
+			lineSem = semanticFile.readFile();
+			
+			treeFile.newLine();
+		}
+		
+		treeFile.stop();
+		termFile.closeFile();
+		semanticFile.closeFile();
+		
+		
+	}
+
 	private void prepareTreeData(String termFrequenciesFile, String semanticVariablesFiles, String treeDataFile) {
 		InputDelegate termFile = new InputDelegate(termFrequenciesFile);
 		InputDelegate semanticFile = new InputDelegate(semanticVariablesFiles);
@@ -102,6 +168,8 @@ public class Manager {
 		
 		String lineTerm = termFile.readFile();
 		String lineSem = semanticFile.readFile();
+		
+		int fileCount = 0;
 		
 		while(lineTerm != null)
 		{
@@ -120,12 +188,18 @@ public class Manager {
 			treeFile.write(",");
 			treeFile.write(temp[2]);
 			treeFile.write(",");
-			treeFile.write("yes");
+			
+			if(fileCount< nonePopularResults)
+				treeFile.write("yes");
+			else
+				treeFile.write("no");
 			
 			lineTerm = termFile.readFile();
 			lineSem = semanticFile.readFile();
 			
 			treeFile.newLine();
+			
+			fileCount++;
 		}
 		
 		treeFile.stop();

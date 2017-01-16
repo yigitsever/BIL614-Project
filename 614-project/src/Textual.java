@@ -205,6 +205,11 @@ public class Textual {
 
 		return mostCommonTerms;
 	}
+	
+	public void setTrainFolder(String trainFolder)
+	{
+		this.trainFolder = trainFolder;
+	}
 
 	/*
 	 * public static <K, V extends Comparable<? super V>> Map<K, V>
