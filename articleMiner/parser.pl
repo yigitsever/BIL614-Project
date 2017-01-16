@@ -15,7 +15,14 @@ my ( $dataFlag, $dataFileName, $outputFolder, @rest ) = @ARGV;
 if ( not defined $dataFlag || not defined $dataFileName || not defined $outputFolder ) {
 	help();
 	exit;
+} elsif ( $dataFlag =~ /[^pu]/) {
+	help();
+	exit;
+} else {
+	$dataFlag = $dataFlag eq 'p' ? 1 : 0;
 }
+
+### dataFlag is: $dataFlag
 
 if ( @rest ) { warn "Ignoring @rest"; }
 
@@ -30,6 +37,18 @@ while (my $cheatRow = <DATA>) {
 tie my @dataRows, 'Tie::File', $dataFileName or die "Cannot initialize TieFile, $!";
 
 my $success = 0;
+
+if (!$dataFlag) {
+	open(my $th, '<', '.ihml') or die "This is probably better";
+	while (<$th>) {
+		$success = $_;
+	}
+	close $th;
+}
+
+my $memory = $success;
+
+
 for my $row (@dataRows) { ### Done %
 
 	my @urlPair = split ",", $row;
@@ -54,11 +73,13 @@ for my $row (@dataRows) { ### Done %
 		$month = lc $1;
 	} elsif ($content =~ /<em class=\"_b ntime\"><\/em>\s?\d+\.0?(1[0-2]|[0-9])\./) { # siyaset
 		$month = $months{$1};
-	} elsif ($lastResort =~ /eksisozluk\.com\/\d+-(\w+)-/) {
-		# haber icerisinde yayinlanma tarihi yok/cok sacma bir yerde
-		$month = $months{$1};
+	} elsif( $dataFlag ) {
+		if ($lastResort =~ /eksisozluk\.com\/\d+-(\w+)-/) {
+			# haber icerisinde yayinlanma tarihi yok/cok sacma bir yerde
+			$month = $months{$1};
+		}
 	} else {
-		# Does not work for: $url, can't really happen
+		$month = $url;
 	}
 
 	my $articleOutputFile = "$outputFolder/$month/$success";
@@ -114,7 +135,13 @@ for my $row (@dataRows) { ### Done %
 	close $articleWriter;
 }
 
-print "Rules work for $success / $#dataRows\n";
+print "Rules work for " . ($success - $memory) . " / $#dataRows\n";
+
+if ($dataFlag) {
+	open(my $th, '>', '.ihml') or die "This is probably better";
+	print $th $success;
+	close $th;
+}
 
 sub removeTags {
 	$_[0] =~ s/<.+?>//g;
