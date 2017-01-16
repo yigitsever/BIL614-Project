@@ -9,15 +9,13 @@ use Smart::Comments;
 use Data::Dumper;
 
 use utf8;
-binmode STDIN, ':encoding(UTF-8)';
-binmode STDOUT, ':encoding(UTF-8)';
 
-my ( $dataFileName, $outputFolder, @rest ) = @ARGV;
+my ( $dataFlag, $dataFileName, $outputFolder, @rest ) = @ARGV;
 
-if ( not defined $dataFileName ) {	die "Need data file name"; }
-
-if ( not defined $outputFolder ) {	die "Need output folder name"; }
-
+if ( not defined $dataFlag || not defined $dataFileName || not defined $outputFolder ) {
+	help();
+	exit;
+}
 
 if ( @rest ) { warn "Ignoring @rest"; }
 
@@ -27,7 +25,6 @@ while (my $cheatRow = <DATA>) {
 	chomp $cheatRow;
 	my @monthPair = split " ", $cheatRow;
 	$months{$monthPair[0]} = $monthPair[1];
-
 }
 
 tie my @dataRows, 'Tie::File', $dataFileName or die "Cannot initialize TieFile, $!";
@@ -125,6 +122,23 @@ sub removeTags {
 	return $_[0];
 }
 
+sub help {
+
+	my $test =
+	"
+    _         _   _      _      ____
+   / \\   _ __| |_(_) ___| | ___|  _ \\ __ _ _ __ ___  ___ _ __
+  / _ \\ | '__| __| |/ __| |/ _ \\ |_) / _` | '__/ __|/ _ \\ '__|
+ / ___ \\| |  | |_| | (__| |  __/  __/ (_| | |  \\__ \\  __/ |
+/_/   \\_\\_|   \\__|_|\\___|_|\\___|_|   \\__,_|_|  |___/\\___|_|
+
+	\n
+Usage: \$perl parser.pl <dataFlag> <dataRowsFile> <outputFolder>\n
+dataFlag: p | u\n\tp: popular articles (articles with eksisozluk threads)\n\tu: unpopular (articles without eksisozluk threads\n";
+
+
+	print $test;
+}
 
 __DATA__
 0 null
