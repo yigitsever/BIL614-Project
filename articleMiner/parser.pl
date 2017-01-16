@@ -12,15 +12,14 @@ use utf8;
 binmode STDIN, ':encoding(UTF-8)';
 binmode STDOUT, ':encoding(UTF-8)';
 
-my ( $dataFileName, @rest ) = @ARGV;
+my ( $dataFileName, $outputFolder, @rest ) = @ARGV;
 
-if ( not defined $dataFileName ) {
-	die "Need data file name";
-}
+if ( not defined $dataFileName ) {	die "Need data file name"; }
 
-if ( @rest ) {
-	warn "Ignoring @rest";
-}
+if ( not defined $outputFolder ) {	die "Need output folder name"; }
+
+
+if ( @rest ) { warn "Ignoring @rest"; }
 
 my %months;
 
@@ -34,7 +33,7 @@ while (my $cheatRow = <DATA>) {
 tie my @dataRows, 'Tie::File', $dataFileName or die "Cannot initialize TieFile, $!";
 
 my $success = 0;
-for my $row (@dataRows) {
+for my $row (@dataRows) { ### Done %
 
 	my @urlPair = split ",", $row;
 	my $url = $urlPair[1];
@@ -42,12 +41,11 @@ for my $row (@dataRows) {
 	my $content = get($url);
 
 	if ( not defined $content ) {
-		### WHOLE CONTENT IS NOT DEFINED for: $url
+		# WHOLE CONTENT IS NOT DEFINED for: $url
 		next;
 	}
 
 	my $month;
-
 
 	if ($content =~ /<div class=\"date\">\d+\.0?(1[0-2]|[0-9])\./) { # Numeric, gundem
 		# Found month: $1
@@ -63,10 +61,10 @@ for my $row (@dataRows) {
 		# haber icerisinde yayinlanma tarihi yok/cok sacma bir yerde
 		$month = $months{$1};
 	} else {
-		### Does not work for: $url
+		# Does not work for: $url, can't really happen
 	}
 
-	my $articleOutputFile = "data/$month/$success";
+	my $articleOutputFile = "$outputFolder/$month/$success";
 	my $dir = dirname($articleOutputFile);
 
 	unless ( -d $dir ) { # no exists
@@ -109,7 +107,7 @@ for my $row (@dataRows) {
 	}
 
 	if ( not defined $parsedText ) {
-		### parsedText not defined for: $url
+		# parsedText not defined for: $url
 	} else {
 		removeTags($parsedText);
 		$success++;
