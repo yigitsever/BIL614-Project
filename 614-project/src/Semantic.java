@@ -43,7 +43,7 @@ public class Semantic {
 		semanticVariables = new ArrayList<>();
 	}
 	
-	public ArrayList<ArrayList<Integer>> findSemanticVariables(OutputDelegate outSemanticVariables)
+	public ArrayList<ArrayList<Integer>> findSemanticVariables(String outSemanticFile)
 	{
 		ArrayList<ArrayList<Integer>> allResults = new ArrayList<>();
 		
@@ -62,8 +62,11 @@ public class Semantic {
 			}
 
 		}
+		
+		HashMap<String,String> nerHash = new HashMap<>();
+		
 		for (String folder : folders) {
-			HashMap<String,String> nerHash = new HashMap<>();
+			
 			File[] folderFiles = new File(folder).listFiles();
 			for (File folderFile : folderFiles) {
 				if (!folderFile.isHidden()) {
@@ -147,7 +150,11 @@ public class Semantic {
 					
 					allResults.add(results);
 					
+
+					OutputDelegate outSemanticVariables = new OutputDelegate(outSemanticFile);
 					outSemanticVariables.write("Person="+personCount+" Organization="+orgCount+ " Location="+locCount);
+					outSemanticVariables.newLine();
+					outSemanticVariables.stop();
 				}
 			}
 		}

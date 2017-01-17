@@ -25,7 +25,7 @@ public class Manager {
 		
 	}
 	
-	public void execute(boolean useOutputs)
+	public void execute(boolean useOutputs, boolean executeMostCommon, boolean executeTermFreq, boolean executeSemantic, boolean executeTermFreqForTest, boolean executeSemanticForTest, boolean executePrepareTree, boolean executePrepareTestTree, boolean executeRandomForest)
 	{
 		
 		if(useOutputs == false )
@@ -36,80 +36,108 @@ public class Manager {
 			Textual textualFeatures = new Textual(trainFolder); 
 			Semantic semanticFeatures = new Semantic(trainFolder);
 			
-			ArrayList<String> mostCommonTerms = textualFeatures.findMostCommonTerms(100);
-			
-			OutputDelegate outMostCommon = new OutputDelegate("MostCommonTerms.txt");
-			
-			for(String mct : mostCommonTerms)
+			if(executeMostCommon)
 			{
-				outMostCommon.write(mct);
-				outMostCommon.newLine();
+				ArrayList<String> mostCommonTerms = textualFeatures.findMostCommonTerms(200);
+				
+				OutputDelegate outMostCommon = new OutputDelegate("MostCommonTerms.txt");
+				
+				for(String mct : mostCommonTerms)
+				{
+					outMostCommon.write(mct);
+					outMostCommon.newLine();
+				}
+				
+				outMostCommon.stop();
 			}
 			
-			outMostCommon.stop();
-			
-			ArrayList<Integer> termFrequenciesForFile = textualFeatures.findTermFrequencies();
-			
-			OutputDelegate outTermFrequencies = new OutputDelegate("TermFrequencies.txt");
-			
-			for(int tf : termFrequenciesForFile )
+			if(executeTermFreq)
 			{
-				outTermFrequencies.write(tf+""); 
-				outTermFrequencies.newLine();
+				ArrayList<Integer> termFrequenciesForFile = textualFeatures.findTermFrequencies();
+				
+				OutputDelegate outTermFrequencies = new OutputDelegate("TermFrequencies.txt");
+				
+				for(int tf : termFrequenciesForFile )
+				{
+					outTermFrequencies.write(tf+""); 
+					outTermFrequencies.newLine();
+				}
+				
+				outTermFrequencies.stop();
 			}
 			
-			outTermFrequencies.stop();
+			if(executeSemantic)
+			{
+				
+				ArrayList<ArrayList<Integer>> semanticVariables = semanticFeatures.findSemanticVariables("SemanticVariables.txt");
+				
+				
+			}
 			
-			OutputDelegate outSemanticVariables = new OutputDelegate("SemanticVariables.txt");
 			
-			ArrayList<ArrayList<Integer>> semanticVariables = semanticFeatures.findSemanticVariables(outSemanticVariables);
 			
-			outSemanticVariables.stop();
 			
 			//here comes to test data
 			
-			textualFeatures.setTrainFolder(testFolder);
-			ArrayList<Integer> testTermFrequenciesForFile = textualFeatures.findTermFrequencies();
-			
-			OutputDelegate outTestTermFrequencies = new OutputDelegate("TestTermFrequencies.txt");
-			
-			for(int tf : testTermFrequenciesForFile )
+			if(executeTermFreqForTest)
 			{
-				outTestTermFrequencies.write(tf+""); 
-				outTestTermFrequencies.newLine();
+				textualFeatures.setTrainFolder(testFolder);
+				ArrayList<Integer> testTermFrequenciesForFile = textualFeatures.findTermFrequencies();
+				
+				OutputDelegate outTestTermFrequencies = new OutputDelegate("TestTermFrequencies.txt");
+				
+				for(int tf : testTermFrequenciesForFile )
+				{
+					outTestTermFrequencies.write(tf+""); 
+					outTestTermFrequencies.newLine();
+				}
+				
+				outTestTermFrequencies.stop();
 			}
 			
-			outTestTermFrequencies.stop();
+			if(executeSemanticForTest)
+			{
+				
+				Semantic testSemanticFeatures = new Semantic(testFolder);
+				
+				ArrayList<ArrayList<Integer>> testSemanticVariables = testSemanticFeatures.findSemanticVariables("TestSemanticVariables.txt");
+				
+			}
 			
-			OutputDelegate outTestSemanticVariables = new OutputDelegate("TestSemanticVariables.txt");
-			
-			Semantic testSemanticFeatures = new Semantic(testFolder);
-			
-			ArrayList<ArrayList<Integer>> testSemanticVariables = testSemanticFeatures.findSemanticVariables(outTestSemanticVariables);
-			
-			outTestSemanticVariables.stop();
+		
 			
 			
 		}
 		
-		prepareTreeData("TermFrequencies.txt","SemanticVariables.txt","TreeData.txt");
-		prepareTestTreeData("TestTermFrequencies.txt","TestSemanticVariables.txt","TestData.txt");
-		
-		
-		
-		RandomForestRunner rfRunner = new RandomForestRunner("TreeData.txt","TestData.txt");
-		
-		ArrayList<ArrayList<String>> rfResults = rfRunner.run();
-		
-		OutputDelegate outRFResults = new OutputDelegate("RandomForestResults.txt");
-		
-		for(ArrayList<String> rfResult : rfResults)
+		if(executePrepareTree)
 		{
-			outRFResults.write(rfResult.get(1) +" " + rfResult.get(0));
-			outRFResults.newLine();
+			prepareTreeData("TermFrequencies.txt","SemanticVariables.txt","TreeData.txt");
 		}
 		
-		outRFResults.stop();
+		if(executePrepareTestTree)
+		{
+			prepareTestTreeData("TestTermFrequencies.txt","TestSemanticVariables.txt","TestData.txt");
+		}
+		
+		
+		if(executeRandomForest)
+		{
+			RandomForestRunner rfRunner = new RandomForestRunner("TreeData.txt","TestData.txt");
+			
+			ArrayList<ArrayList<String>> rfResults = rfRunner.run();
+			
+			OutputDelegate outRFResults = new OutputDelegate("RandomForestResults.txt");
+			
+			for(ArrayList<String> rfResult : rfResults)
+			{
+				outRFResults.write(rfResult.get(1) +" " + rfResult.get(0));
+				outRFResults.newLine();
+			}
+			
+			outRFResults.stop();
+		}
+		
+		
 		
 		
 	}
@@ -209,7 +237,7 @@ public class Manager {
 		
 	}
 
-	private void findStopWords() {
+	public void findStopWords() {
 		InputDelegate idel = new InputDelegate("stopWords.txt");
 		
 		idel.openFile();

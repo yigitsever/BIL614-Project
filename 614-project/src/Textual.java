@@ -171,16 +171,11 @@ public class Textual {
 								continue;
 							}
 
-							if (vector.containsKey(word)) {
-								vector.put(word, vector.get(word) + (1.0));
+							if (documentFrequencyMap.containsKey(word)) {
+								documentFrequencyMap.put(word, documentFrequencyMap.get(word) + 1);
 							} else {
-								indexList.add(word);
-								vector.put(word, 1.0);
-								if (documentFrequencyMap.containsKey(word)) {
-									documentFrequencyMap.put(word, documentFrequencyMap.get(word) + 1);
-								} else {
-									documentFrequencyMap.put(word, 1);
-								}
+								documentFrequencyMap.put(word, 1);
+								
 							}
 						}
 						line = inputDelegate.readFile();
@@ -194,7 +189,7 @@ public class Textual {
 		}
 
 		Map<String, Integer> mostCommon100 = documentFrequencyMap.entrySet().stream()
-				.sorted(Map.Entry.comparingByKey(Comparator.reverseOrder())).limit(termCount)
+				.sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).limit(termCount)
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
 		// ArrayList<String> results = new ArrayList<>();
