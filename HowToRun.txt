@@ -1,0 +1,22 @@
+first you need to download dbpedia jar file from here ;
+http://spotlight.sztaki.hu/downloads/ 
+download dbpedia-spotlight-latest.jar
+after that you should download Turkish Package from here ;
+http://spotlight.sztaki.hu/downloads/latest_models/
+download tr.tar.gz file and extract it in same folder with dbpedia-spotlight-latest.jar
+then simply run jar file with below command;
+>java -jar dbpedia-spotlight-latest.jar tr http://localhost:8080/rest
+
+Then you should extract test.zip and train.zip files to different folders.
+
+Then in app.config file change trainFolder and testFolder parameters with those folders.
+
+After that you can start program like ;
+
+>javac Main.java
+>java Main
+
+Program will print results to RandomForestResults.txt file.
+Also it will print True Positive, False Positive, False Negative, Precision, Recall and F1 score.
+
+
