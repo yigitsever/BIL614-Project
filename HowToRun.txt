@@ -1,3 +1,6 @@
+Remove MostCommonTerms.txt , SemanticVariables.txt, TermFrequencies.txt, TestData.txt, TestSemanticVariables.txt, TestTermFrequencies.txt, TreeData.txt, RandomForestResults.txt files if exists.
+
+
 first you need to download dbpedia jar file from here ;
 http://spotlight.sztaki.hu/downloads/ 
 download dbpedia-spotlight-latest.jar
