@@ -13,7 +13,7 @@ public class OutputDelegate {
 	private FileWriter output;
 	public OutputDelegate(String fileName) {
 		try {
-			output =new FileWriter(fileName,false);
+			output =new FileWriter(fileName,true);
 			buff=new BufferedWriter(output);
 		} catch (IOException e) {
 			e.printStackTrace();
