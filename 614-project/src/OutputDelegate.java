@@ -4,7 +4,7 @@ import java.io.IOException;
 
 /**
  * This class makes output operations
- * @author Ridvan
+ * @author Eran
  *
  */
 public class OutputDelegate {
@@ -13,7 +13,7 @@ public class OutputDelegate {
 	private FileWriter output;
 	public OutputDelegate(String fileName) {
 		try {
-			output =new FileWriter(fileName,true);
+			output =new FileWriter(fileName,false);
 			buff=new BufferedWriter(output);
 		} catch (IOException e) {
 			e.printStackTrace();
