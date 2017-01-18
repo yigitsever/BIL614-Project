@@ -15,7 +15,7 @@ public class RandomForestRunner {
 	public ArrayList<ArrayList<String>> run() {
 		MainRun rfFast = new MainRun();
 
-		return rfFast.RFRunner(trainData, testData, "N,N,N,N,L", "n", "n", 10, 4, 4, 4);
+		return rfFast.RFRunner(trainData, testData, "N,N,N,N,L", "n", "n", 10, 4, 3, 4);
 
 	}
 

@@ -1,12 +1,19 @@
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.ParseException;
@@ -29,6 +36,9 @@ public class Semantic {
 	private int miscCount = 0;
 
 	private String trainFolder = "";
+	
+	private URL dbpedia;
+	private HttpURLConnection dbpedia_connection;
 
 	public static void main(String[] args) {
 		Semantic s = new Semantic("");
@@ -41,6 +51,8 @@ public class Semantic {
 	public Semantic(String trainFolder) {
 		this.trainFolder = trainFolder;
 		semanticVariables = new ArrayList<>();
+		
+		
 	}
 	
 	public ArrayList<ArrayList<Integer>> findSemanticVariables(String outSemanticFile)
@@ -83,63 +95,41 @@ public class Semantic {
 					int orgCount = 0 ;
 
 					while (line != null) {
+						// System.out.println("split edecğim");
+						String[] words = line.split("\\.");
+						// System.out.println("split ettim");
 
-						String[] words = line.split("[^\\p{L}]");
+						System.out.println(words.length);
+						int length = words.length;
+						int wc = 0;
+
 						for (String word : words) {
-							
+							wc++;
+							System.out.println(wc+"/"+length);
+							//System.out.println(word);
+							// System.out.println("stem edeceğim");
+
 							word = word.trim();
 							if (word.contains("@"))
 								continue;
 
-							if (word.trim().length() < 2)
+							if (word.length() < 2)
 								continue;
-
-							if (Manager.stopWords.contains(word)) {
-								continue;
-							}
-
-							word = Manager.stemmIt(word);
 							
-							if (Manager.stopWords.contains(word)) {
-								continue;
-							}
-							
+
 							String ner = "";
+
+							ArrayList<Integer> resultsNer = findNerViaDBPedia(word);
+
 							
-							//System.out.println(";"+word);
-							
-							if(nerHash.containsKey(word))
-							{
-								ner = nerHash.get(word);
-							}
-							else
-							{
-								ner = findNER(word);
-								nerHash.put(word, ner);
-							}
-							
-							 
-							
-							
-							
-							if( ner == null)
-							{
-								continue;
-							}
-							else if( ner.equals("person"))
-							{
-								personCount++;
-							}
-							else if( ner.equals("organization"))
-							{
-								orgCount++;
-							}
-							else if( ner.equals("location"))
-							{
-								locCount++;
-							}
+
+							personCount += resultsNer.get(0);
+							orgCount += resultsNer.get(1);
+							locCount += resultsNer.get(2);
 
 						}
+						
+						//String ner = findNER(word);
 						line = inputDelegate.readFile();
 					}
 					
@@ -229,5 +219,65 @@ public class Semantic {
 		}
 		return null;
 	}
+	
+	public ArrayList<Integer> findNerViaDBPedia(String string)
+	{
+		ArrayList<Integer> results = new ArrayList<>();
+		
+		int personCount = 0 ;
+		int orgCount = 0 ;
+		int locCount = 0 ;
+		
+		String output = "";
+		
+
+		try {
+			try {
+				dbpedia = new URL("http://localhost:8080/rest/annotate");
+				dbpedia_connection = (HttpURLConnection) dbpedia.openConnection();
+				dbpedia_connection.setDoOutput(true);
+				dbpedia_connection.setRequestMethod("GET");
+				dbpedia_connection.setRequestProperty("Accept", "application/json");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+			String urlParameters = "confidance=0.2&support=80&text=";
+			urlParameters = urlParameters.concat(URLEncoder.encode(string));
+
+			
+			DataOutputStream wr = new DataOutputStream(dbpedia_connection.getOutputStream());
+			wr.writeBytes(urlParameters);
+			wr.flush();
+			wr.close();
+			dbpedia_connection.connect();
+			BufferedReader in = new BufferedReader(new InputStreamReader(dbpedia_connection.getInputStream()));
+			String inputLine;
+			
+			while ((inputLine = in.readLine()) != null) {
+				output += inputLine;
+				System.out.println(inputLine);
+			}
+			in.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		personCount = StringUtils.countMatches( output,"Schema:Person");
+		orgCount = StringUtils.countMatches( output,"Schema:Organization");
+
+		locCount = StringUtils.countMatches( output,"Schema:Place");
+		
+		results.add(personCount);
+		results.add(orgCount);
+		results.add(locCount);
+		
+		return results;
+	
+	}
+
 
 }

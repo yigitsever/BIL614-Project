@@ -43,7 +43,7 @@ public class Main {
 			executeSemanticWorkers();
 		} else {
 			Manager man = new Manager((String)config.get("trainFolder"),
-					(String)config.get("trainFolder"), 374);
+					(String)config.get("testFolder"), 374);
 
 			man.execute(false, executeMostCommon, executeTermFreq, executeSemantic, executeTermFreqForTest,
 					executeSemanticForTest, executePrepareTree, executePrepareTestTree, executeRandomForest);
@@ -76,6 +76,8 @@ public class Main {
 			}
 			line = idel.readFile();
 		}
+		
+		System.out.println(conf);
 		return conf;
 	}
 
@@ -87,7 +89,7 @@ public class Main {
 
 		OutputDelegate odel = new OutputDelegate("SemanticWorkerResults.txt");
 
-		ExecutorService pool = Executors.newFixedThreadPool(6);
+		ExecutorService pool = Executors.newFixedThreadPool(7);
 		Set<Future<String>> set = new HashSet<Future<String>>();
 
 		Manager man = new Manager(null, null, 0);
@@ -101,10 +103,10 @@ public class Main {
 		paths.add("/Users/erantoker/Downloads/BIL614-Project-master/train/şubat/");
 		paths.add("/Users/erantoker/Downloads/BIL614-Project-master/train/temmuz/");
 		paths.add("/Users/erantoker/Downloads/BIL614-Project-master/train/unpopular/");
-		
+		paths.add("/Users/erantoker/Downloads/BIL614-Project-master/test/ağustos/");
 
 		for (String word : paths) {
-			Callable<String> callable = new Worker(word);
+			Callable<String> callable = new Worker2(word);
 			Future<String> future = pool.submit(callable);
 			set.add(future);
 		}
