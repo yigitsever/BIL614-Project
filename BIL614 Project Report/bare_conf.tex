@@ -369,7 +369,7 @@ Email: yigitsever94@gmail.com}}
 % As a general rule, do not put math, special symbols or citations
 % in the abstract
 \begin{abstract}
-News agencies publish numerous articles on their websites but only a small portion of those stories get readers' attention and become popular. Although popularity can be measured through the clicks a certain article get, users will also 'vote' on the popularity of stories through their social media shares of articles and this may give opinions about popularity of news story. In this project, we are trying the find out if the news article published by Milliyet.com.tr will be shared in Ekşi Sözlük, a popular Turkish discussion forum.
+News agencies publish numerous articles on their websites but only a small portion of those stories get readers' attention and become popular. Although popularity can be measured through the clicks a certain article get, users will also 'vote' on the popularity of stories through their social media shares of articles and this may give opinions about popularity of news story. In this project, we are trying the find out if the news article published by Milliyet.com.tr will be shared in EksiSozluk.com, a popular Turkish discussion forum.
 
 \end{abstract}
 
@@ -397,9 +397,9 @@ The advancement and steady growth in social media, mainly blogosphere and stream
 
 Our purpose in this work is predicting the popularity of a news article before it goes live. Predicting popularity and traffic of an article might help with determining the desirability of an article, whether or not it is worth to publish and advertise on it. \cite{phukan_feasibility_2016} If news agents knew which articles can or will be popular, they can spend their resources on potential candidates. This concept is also important in the sense of serving a better user experience; news sources can offer articles which might be more interesting to readers. If online news agencies can gain more users, they can earn more money from ad revenue.\cite{bandari_pulse_2012}
 
-Our aim in this paper is to predict popularity of news articles before publication. Popularity is used in the sense that whether or not the article will be shared on Ekşi Sözlük which is the most popular social media establishment in Turkey, with Turkish origins.
+Our aim in this paper is to predict popularity of news articles before publication. Popularity is used in the sense that whether or not the article will be shared on EksiSozluk.com which is the most popular social media establishment in Turkey, with Turkish origins.
 
-This work makes several contributions. First, it explores the dynamics of stories in  Milliyet.com.tr. Second, it introduces the problem of predicting the popularity of a news article. Third, it provides a set of textual and semantic features that can be used to predict if a news article will be shared or not in Ekşi Sözlük before the said article is published. Fourth, it provides an evaluation of the introduced features. Fifth, an error analysis identifies possible causes for classification failure.
+This work makes several contributions. First, it explores the dynamics of stories in  Milliyet.com.tr. Second, it introduces the problem of predicting the popularity of a news article. Third, it provides a set of textual and semantic features that can be used to predict if a news article will be shared or not in EksiSozluk.com before the said article is published. Fourth, it provides an evaluation of the introduced features. Fifth, an error analysis identifies possible causes for classification failure.
 
  
 \section{Related Work}
@@ -417,9 +417,9 @@ Our first research question is, what are the dynamics of user generated comments
 \subsection{Feature Engineering}
 For textual feature, we first found most common 200 terms in all stories. We skipped stop words in Turkish and used Resha Turkish Stemmer \cite{resha-turkish-stemmer} for stemming operations. As we initially predicted; "Basbakan", "Cumhurbaskani", "Futbol", "Polis", "Asker", "Sehit", "Patlama", "Teror" tokens were some of the most common terms as those were related to common occurrences in Turkey, 2016.
 
-For semantic feature, we used ITU Natural Language Processing Toolkit. With this tool, we were able to find Named Entities of each word in the articles. According to pipeline we used the schema represented in Figure \ref{fig_sim}. Thus we were able to get person, organization and location counts for each news article. After that we used Random Forest Algorithm \cite{random-forest}. We had 4 numerical data as in Term Frequency of popular terms, Person Count, Organization Count and Location Count as well as one label which is popular or not. Consequently, we reimplemented GitHub user 'ironmanMa's algorithm for our purpose.
+For semantic feature, first we tried using ITU Natural Language Processing Toolkit. With this tool, we were able to find Named Entities of each word in the articles. According to pipeline we used the schema represented in Figure \ref{fig_sim}. Thus we were able to get person, organization and location counts for each news article. However, this tool was unfeasibly slow; a query for one single word took more than a minute at times. Therefore, we switched to DBPedia-Spotlight \cite{isem2013daiber}. This tool offered in-house querying instead of API querying and we could get person, organization and location results. After that we used Random Forest Algorithm \cite{random-forest}. We had 4 numerical data as in Term Frequency of popular terms, Person Count, Organization Count and Location Count as well as one label which is popular or not. Consequently, we reimplemented GitHub user 'ironmanMa's algorithm for our purpose.
 \begin{figure}[!t]
-	\includegraphics[width=.5in]{schema.png}
+	\includegraphics[width=0.8\textwidth,natwidth=800,natheight=80]{schema.png}
 	% where an .eps filename suffix will be assumed under latex, 
 	% and a .pdf suffix will be assumed for pdflatex; or what has been declared
 	% via \DeclareGraphicsExtensions.
@@ -427,8 +427,81 @@ For semantic feature, we used ITU Natural Language Processing Toolkit. With this
 	\label{fig_sim}
 \end{figure}
 \section{Experiment Setup}
-As mentioned beforehand, EksiSozluk.com does not provide an API, so we manually found news stories shared in EksiSozluk.com. After creating a heap of stories that have been talked about in EksiSozluk.com, we extracted the news stories from webpages and categorized them by month. Then, most common 200 terms were found and written to 'MostCommonTerms' file. Later, we processed input file for textual features and wrote to 'TermFrequencies' file. Since ITU NLP service was offline and generally not stable for most of the time, we used threads for each month and wrote to output file 'SemanticVariables'. Via 3 output files, we have created 'TreeData' files for each test and training stories and wrote to 'TreeData' and 'TestTreeData' file. Using tree data files we used random forest implementation for results. Then we have calculated F1 scores and accuracy.
+As mentioned beforehand, EksiSozluk.com does not provide an API, so we manually found news stories shared in EksiSozluk.com. After creating a heap of stories that have been talked about in EksiSozluk.com, we extracted the news stories from webpages and categorized them by month. Then, most common 200 terms were found and written to 'MostCommonTerms' file. Later, we processed input file for textual features and wrote to 'TermFrequencies' file. Using DBpedia Spotlight, threads wrote to output file 'SemanticVariables' fir each month. Via 3 output files, we have created 'TreeData' files for each test and training stories and wrote to 'TreeData' and 'TestTreeData' file. Using tree data files we used random forest implementation for results. Then we have calculated F1 scores and accuracy.
 
+\section{Results}
+
+The results looked promising as shown in Table \ref{prf1_lc}, approaching results achieved by Bandari et al. \cite{bandari_pulse_2012} with precision score of 0.8.
+
+
+%%%%%%%%%%%%	LOWER CASE TEST RESULTS		%%%%%%%%%%%%
+\begin{table}[!t]
+	\caption{Test Results for Lowercase dataset}
+	\label{test_result_lc}
+	\centering
+	\begin{tabular}{|c|c|}
+		\hline 
+		True Positive & 33 \\ 
+		\hline 
+		False Positive & 8 \\ 
+		\hline 
+		False Negative & 15 \\ 
+		\hline 
+	\end{tabular} 
+\end{table}
+%%%%%%%%%%%%	LOWER CASE TEST RESULTS		%%%%%%%%%%%%
+%%%%%%%%%%%%	LOWER CASE P R F1		%%%%%%%%%%%%
+\begin{table}[!t]
+	\caption{Precision, Recall and F1 Scores for Lowercase dataset}
+	\label{prf1_lc}
+	\centering
+	\begin{tabular}{|c|c|}
+		\hline
+		Precision & 0.80 \\
+		\hline
+		Recall & 0.69 \\
+		\hline
+		F1 Score & 0.74 \\
+		\hline
+	\end{tabular}
+\end{table}
+
+%%%%%%%%%%%%	LOWER CASE P R F1		%%%%%%%%%%%%
+
+ As mentioned before, we opted to convert our dataset to lowercase for the experiments. However, this lead DBpedia Spotlight tool to miss person information, while not having an impact on location or organization information. To eliminate this error, we reverted our dataset back to sentence case (unaltered case) and ran the tests again. Results are shown in Table \ref{test_result_sc} and \ref{prf1_sc} and are improved from lowercase dataset tests by a noticeable margin.
+%%%%%%%%%%%%	Sentence CASE TEST RESULTS		%%%%%%%%%%%%
+\begin{table}[!t]
+	\caption{Test Results for Sentence Case dataset}
+	\label{test_result_sc}
+	\centering
+	\begin{tabular}{|c|c|}
+		\hline 
+		True Positive & 36 \\ 
+		\hline 
+		False Positive & 7 \\ 
+		\hline 
+		False Negative & 12 \\ 
+		\hline 
+	\end{tabular} 
+\end{table}
+%%%%%%%%%%%%	Sentence CASE TEST RESULTS		%%%%%%%%%%%%
+%%%%%%%%%%%%	Sentence CASE P R F1		%%%%%%%%%%%%
+\begin{table}[!t]
+	\caption{Precision, Recall and F1 Scores for Sentence dataset}
+	\label{prf1_sc}
+	\centering
+	\begin{tabular}{|c|c|}
+		\hline
+		Precision & 0.83 \\
+		\hline
+		Recall & 0.75 \\
+		\hline
+		F1 Score & 0.79 \\
+		\hline
+	\end{tabular}
+\end{table}
+
+%%%%%%%%%%%%	Sentence CASE TEST RESULTS		%%%%%%%%%%%%
 
 \section{Conclusion}
 In this work, we aimed to predict the popularity of news articles prior to their publication. We have created a dataset and picked our features regarding earlier works in the literature. After the evaluation steps, we have looked into the misclassified stories. Most of the stories that have been labeled as 'popular' by our implementation but do not have a EksiSozluk.com thread associated to it are actually popular but just not by our parameters. These false positives did have discussions about them, but on threads of a popular person mentioned in the article. We did not have an autonomous method of finding these links. Another case of misclassified stories included a lot of famous people or organizations but the stories themselves were not interesting or worth talking about (i.e. clickbait).
@@ -483,15 +556,15 @@ In this work, we aimed to predict the popularity of news articles prior to their
 % The \label must come after \caption as always.
 %
 %\begin{table}[!t]
-%% increase table row spacing, adjust to taste
-%\renewcommand{\arraystretch}{1.3}
-% if using array.sty, it might be a good idea to tweak the value of
-% \extrarowheight as needed to properly center the text within the cells
+%%% increase table row spacing, adjust to taste
+%%\renewcommand{\arraystretch}{1.3}
+%% if using array.sty, it might be a good idea to tweak the value of
+%% \extrarowheight as needed to properly center the text within the cells
 %\caption{An Example of a Table}
 %\label{table_example}
 %\centering
-%% Some packages, such as MDW tools, offer better commands for making tables
-%% than the plain LaTeX2e tabular which is used here.
+%%% Some packages, such as MDW tools, offer better commands for making tables
+%%% than the plain LaTeX2e tabular which is used here.
 %\begin{tabular}{|c||c|}
 %\hline
 %One & Two\\
@@ -500,7 +573,6 @@ In this work, we aimed to predict the popularity of news articles prior to their
 %\hline
 %\end{tabular}
 %\end{table}
-
 
 % Note that IEEE does not put floats in the very first column - or typically
 % anywhere on the first page for that matter. Also, in-text middle ("here")
