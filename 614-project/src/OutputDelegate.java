@@ -4,7 +4,7 @@ import java.io.IOException;
 
 /**
  * This class makes output operations
- * @author Ridvan
+ * @author Eran
  *
  */
 public class OutputDelegate {

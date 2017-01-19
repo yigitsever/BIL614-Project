@@ -128,11 +128,52 @@ public class Manager {
 			
 			OutputDelegate outRFResults = new OutputDelegate("RandomForestResults.txt");
 			
+
+			int count = 0 ; 
+			
+			int unpopular = 48 ; // 48den sonrasi unpopular
+			
+			int truePositive = 0 ;
+			int falsePositive = 0 ;
+			int falseNegative = 0 ;
+			
 			for(ArrayList<String> rfResult : rfResults)
 			{
+				String r = rfResult.get(0);
 				outRFResults.write(rfResult.get(1) +" " + rfResult.get(0));
 				outRFResults.newLine();
+				
+				if(r.equals("yes") && (count<unpopular))
+				{
+					truePositive++;
+				}
+				else if(r.equals("yes") && count >= unpopular)
+				{
+					falsePositive++;
+				}
+				else if( r.equals("no") && count < unpopular)
+				{
+					falseNegative++;
+				}
+				
+				
+				
+				count++ ;
 			}
+			
+			System.err.println("True Positive" + truePositive);
+			System.err.println("False Positive" + falsePositive);
+			System.err.println("False Negative" + falseNegative);
+			
+			double pre = (double) truePositive / (double)(truePositive + falsePositive) ;
+			double rec = (double) truePositive / (double)(truePositive + falseNegative) ;
+			
+			System.err.println("Precision " + pre);
+			System.err.println("Recall " + rec);
+			
+			double f1 = (2* pre * rec) / (pre + rec);
+			
+			System.err.println("F1 score" +f1);
 			
 			outRFResults.stop();
 		}
@@ -171,6 +212,8 @@ public class Manager {
 			treeFile.write(temp[1]);
 			treeFile.write(",");
 			treeFile.write(temp[2]);
+			
+			treeFile.write(",?");
 			
 			lineTerm = termFile.readFile();
 			lineSem = semanticFile.readFile();

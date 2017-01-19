@@ -25,6 +25,8 @@ public class Textual {
 	}
 
 	public ArrayList<Integer> findTermFrequencies() {
+		
+		termFrequencyValues.clear();
 		File[] files = new File(trainFolder).listFiles();
 		ArrayList<String> folders = new ArrayList<String>();
 
