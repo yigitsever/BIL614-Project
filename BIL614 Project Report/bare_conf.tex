@@ -196,9 +196,11 @@ Bu çalışma alanyazına birkaç katkı yapmaktadır. Öncelikle, Milliyet.com.
 Çoğu popülerlik tahmini çalışması, içeriğin ilk başta aldığı yorumlar/paylaşımlar üzerinde kuruludur \cite{szabo_predicting_2010}. Bu yöntemlerin çalışabilmesi için içeriğin yayınlanması gerekmektedir ve bu içerik yayınlanmadan önce yapılan çözümlemenin getirdiği artı noktaları sağlayamaz.
 2009 yılında yapılan bir çalışmanın \cite{tsagkias_predicting_2009} popülerlik tahmin etmek için 5 elemanlı bir özellik seti vardır: yüzey (surface), birikimli (cumulative), metinsel (textual), anlamsal (semantic) ve gerçek dünya (real world). Yüzey özelliği içerikte geçen resimler ya da içeriğe katkıda bulunan yazarların sayısıdır. Birikimli özelliği içeriğin yayınlanma saatinde yayınlanan diğer içeriklerin sayısıdır. Gerçek dünya özelliği içeriğin yayınlandığı gün havanın güneşli mi yoksa bulutlu mu olduğuyla ilgilenmektedir. Sonuç olarak, çalışmamızda metin madenciliği konu kapsamında bulunan \emph{metinsel} ve \emph{anlamsal} özelliklerini kullandık.
 
-\section{Data and Features}
-\subsection{Exploring News}
-The data we used in the project consists of 449 news stories published at Milliyet.com.tr between February 2016 to August 2016. Among those 449 news stories, 60 of them are tagged as 'unpopular' by us since they were not shared in Eksisozluk.com. The reason for relatively small sample size is that there were no set methods or data sets of Turkish news articles that are linked to threads opened at Eksisozluk.com, as a result, the dataset was put together by us via hand. Another challenge was the fact that Eksisozluk.com is not a social media that users share content with links and have discussion based on them (i.e. Twitter, Reddit) but a discussion forum with topics and thread titles decided by users. Therefore, an automated method would not be plausible.
+\section{Veri ve Özellikler}
+\subsection{Haberleri Tanımak}
+Çalışmamızda kullandığımız veri kümesi Şubat 2016 ile Ağustos 2016 arasında Milliyet.com.tr sitesinde yayınlanan 449 haber metninden oluşmaktadır. Bu 449 haber arasından 60 tanesi EkşiSözlük.com üzerinden paylaşılmadığı/tartışılmadığı için 'popüler değil' olarak etiketlenmiştir. Veri kümemizin sayıca az olmasının sebebi halihazırda haber makalelerini EkşiSözlük.com başlıklarıyla bağdaştıran bir yöntem ya da veri kümesi olmamasıdır. Bu sebeple veri kümemiz bizler tarafından el ile hazırlanmıştır.
+%%%%%%%%%%%%%%%%%%%%%% TODO{HERE} %%%%%%%%%%%%%%%%%%%5
+Another challenge was the fact that Eksisozluk.com is not a social media that users share content with links and have discussion based on them (i.e. Twitter, Reddit) but a discussion forum with topics and thread titles decided by users. Therefore, an automated method would not be plausible.
 
 The selected news articles were then parsed and their content extracted. News articles come with a heading, a subheading and the actual text content which we appended together and handled as news body.
 
