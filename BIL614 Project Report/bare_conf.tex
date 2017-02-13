@@ -192,9 +192,9 @@ Bu çalışmada popülerlik tanımı, belirli bir haber metninin EkşiSözlük.c
 Bu çalışma alanyazına birkaç katkı yapmaktadır. Öncelikle, Milliyet.com.tr üzerindeki haber metinlerinin dinamiklerini incelemektedir. Haber metinlerinin popülerliğini tahmin etme sorusuna ilk kez yanıt aramaktadır. Haber yayınlanmadan önce halihazırda var olan metinsel ve anlamsal özellikleri kullanarak bir haberin EkşiSözlük.com sitesinde tartışılıp tartışılmayacağını sorgulamaktadır. Önerilen bu özelliklerin nasıl değerlendirileceğini anlatmaktadır. Son olarak, hata çözümlemesi yaparak yöntemden doğan sınıflandırma hatalarına sebepler aramaktadır.
 
  
-\section{Related Work}
-Most of the popularity prediction works based their approach on early comments/likes/retweets. \cite{szabo_predicting_2010} The implication is, the content actually needs to be published, losing valuable aspects that will be gained from a prior analysis.
-In a research conducted in 2009 \cite{tsagkias_predicting_2009}, they have used a 5 feature set for finding popularity; surface, cumulative, textual, semantic and real world. Surface feature consisted of images present in the article or how many authors have contributed to the article. Cumulative feature looked for how many articles were published at the same hour. Real world feature analyzed whether or not the weather was nice or cloudy. Subsequently, we used \emph{textual} and \emph{semantic} features since those are the only features that are related to text mining.
+\section{İlgili Çalışmalar}
+Çoğu popülerlik tahmini çalışması, içeriğin ilk başta aldığı yorumlar/paylaşımlar üzerinde kuruludur \cite{szabo_predicting_2010}. Bu yöntemlerin çalışabilmesi için içeriğin yayınlanması gerekmektedir ve bu içerik yayınlanmadan önce yapılan çözümlemenin getirdiği artı noktaları sağlayamaz.
+2009 yılında yapılan bir çalışmanın \cite{tsagkias_predicting_2009} popülerlik tahmin etmek için 5 elemanlı bir özellik seti vardır: yüzey (surface), birikimli (cumulative), metinsel (textual), anlamsal (semantic) ve gerçek dünya (real world). Yüzey özelliği içerikte geçen resimler ya da içeriğe katkıda bulunan yazarların sayısıdır. Birikimli özelliği içeriğin yayınlanma saatinde yayınlanan diğer içeriklerin sayısıdır. Gerçek dünya özelliği içeriğin yayınlandığı gün havanın güneşli mi yoksa bulutlu mu olduğuyla ilgilenmektedir. Sonuç olarak, çalışmamızda metin madenciliği konu kapsamında bulunan \emph{metinsel} ve \emph{anlamsal} özelliklerini kullandık.
 
 \section{Data and Features}
 \subsection{Exploring News}
