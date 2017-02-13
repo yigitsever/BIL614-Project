@@ -199,7 +199,7 @@ Bu çalışma alanyazına birkaç katkı yapmaktadır. Öncelikle, Milliyet.com.
 \section{Veri ve Özellikler}
 \subsection{Haberleri Tanımak}
 Çalışmamızda kullandığımız veri kümesi Şubat 2016 ile Ağustos 2016 arasında Milliyet.com.tr sitesinde yayınlanan 449 haber metninden oluşmaktadır. Bu 449 haber arasından 60 tanesi EkşiSözlük.com üzerinden paylaşılmadığı/tartışılmadığı için 'popüler değil' olarak etiketlenmiştir. Veri kümemizin sayıca az olmasının sebebi halihazırda haber makalelerini EkşiSözlük.com başlıklarıyla bağdaştıran bir yöntem ya da veri kümesi olmamasıdır. Bu sebeple veri kümemiz bizler tarafından el ile hazırlanmıştır.
-%%%%%%%%%%%%%%%%%%%%%% TODO{HERE} %%%%%%%%%%%%%%%%%%%5
+
 Another challenge was the fact that Eksisozluk.com is not a social media that users share content with links and have discussion based on them (i.e. Twitter, Reddit) but a discussion forum with topics and thread titles decided by users. Therefore, an automated method would not be plausible.
 
 The selected news articles were then parsed and their content extracted. News articles come with a heading, a subheading and the actual text content which we appended together and handled as news body.
@@ -296,8 +296,7 @@ The results looked promising as shown in Table \ref{prf1_lc}, approaching result
 %%%%%%%%%%%%	Sentence CASE TEST RESULTS		%%%%%%%%%%%%
 
 \section{Conclusion}
-In this work, we aimed to predict the popularity of news articles prior to their publication. We have created a dataset and picked our features regarding earlier works in the literature. After the evaluation steps, we have looked into the misclassified stories. Most of the stories that have been labeled as 'popular' by our implementation but do not have a EksiSozluk.com thread associated to it are actually popular but just not by our parameters. These false positives did have discussions about them, but on threads of a popular person mentioned in the article. We did not have an autonomous method of finding these links. Another case of misclassified stories included a lot of famous people or organizations but the stories themselves were not interesting or worth talking about (i.e. clickbait).
-
+Bu çalışmada, haber makalelerinin olası popüleritelerini, henüz yayınlanmadan tahmin etmeyi amaçladık. Bu amaçla verileri topladık ve bu konuda daha önce yapılmış araştırmalara göre özellik setini çıkardık. Algoritma adımlarını işlettikten sonra popüleritesi yanlış tahmin edilmiş makalelere göz attık. Bizim yöntemimize göre popüler olarak etiketlenmiş fakat ekşi sözlükte özel olarak başlığı açılmamış makalelerin, aslında gerçekten popüler olduğu, fakat başlığı açılmadan makalede yer alan kişi veya kurumların başlıklarında konunun tartışıldığını gözlemledik. Makalelerin yanlış pozitif olarak etiketlenmelerinin bir başka sebebi ise, makalede bir çok popüler terim/kişi/kurum geçmesine rağmen içeriklerin boş olmasıydı (Tık Tuzağı).
 
 % An example of a floating figure using the graphicx package.
 % Note that \label must occur AFTER (or within) \caption.
@@ -372,20 +371,6 @@ In this work, we aimed to predict the popularity of news articles prior to their
 % exclusively. Note that, LaTeX2e, unlike IEEE journals/conferences, places
 % footnotes above bottom floats. This can be corrected via the \fnbelowfloat
 % command of the stfloats package.
-
-
-
-
-
-
-% conference papers do not normally have an appendix
-
-
-% use section* for acknowledgement
-%\section*{Acknowledgment}
-
-
-%The authors would like to thank...
 
 
 % references section
