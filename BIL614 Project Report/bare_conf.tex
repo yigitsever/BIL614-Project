@@ -20,7 +20,7 @@
 %% Legal Notice:
 %% This code is offered as-is without any warranty either expressed or
 %% implied; without even the implied warranty of MERCHANTABILITY or
-%% FITNESS FOR A PARTICULAR PURPOSE! 
+%% FITNESS FOR A PARTICULAR PURPOSE!
 %% User assumes all risk.
 %% In no event shall IEEE or any contributor to this code be liable for
 %% any damages or losses, including, but not limited to, incidental,
@@ -120,7 +120,7 @@
 % graphicx was written by David Carlisle and Sebastian Rahtz. It is
 % required if you want graphics, photos, etc. graphicx.sty is already
 % installed on most LaTeX systems. The latest version and documentation
-% can be obtained at: 
+% can be obtained at:
 % http://www.ctan.org/tex-archive/macros/latex/required/graphics/
 % Another good source of documentation is "Using Imported Graphics in
 % LaTeX2e" by Keith Reckdahl which can be found at:
@@ -191,7 +191,7 @@ Bu çalışmada popülerlik tanımı, belirli bir haber metninin EkşiSözlük.c
 
 Bu çalışma alanyazına birkaç katkı yapmaktadır. Öncelikle, Milliyet.com.tr üzerindeki haber metinlerinin dinamiklerini incelemektedir. Haber metinlerinin popülerliğini tahmin etme sorusuna ilk kez yanıt aramaktadır. Haber yayınlanmadan önce halihazırda var olan metinsel ve anlamsal özellikleri kullanarak bir haberin EkşiSözlük.com sitesinde tartışılıp tartışılmayacağını sorgulamaktadır. Önerilen bu özelliklerin nasıl değerlendirileceğini anlatmaktadır. Son olarak, hata çözümlemesi yaparak yöntemden doğan sınıflandırma hatalarına sebepler aramaktadır.
 
- 
+
 \section{İlgili Çalışmalar}
 Çoğu popülerlik tahmini çalışması, içeriğin ilk başta aldığı yorumlar/paylaşımlar üzerinde kuruludur \cite{szabo_predicting_2010}. Bu yöntemlerin çalışabilmesi için içeriğin yayınlanması gerekmektedir ve bu içerik yayınlanmadan önce yapılan çözümlemenin getirdiği artı noktaları sağlayamaz.
 2009 yılında yapılan bir çalışmanın \cite{tsagkias_predicting_2009} popülerlik tahmin etmek için 5 elemanlı bir özellik seti vardır: yüzey (surface), birikimli (cumulative), metinsel (textual), anlamsal (semantic) ve gerçek dünya (real world). Yüzey özelliği içerikte geçen resimler ya da içeriğe katkıda bulunan yazarların sayısıdır. Birikimli özelliği içeriğin yayınlanma saatinde yayınlanan diğer içeriklerin sayısıdır. Gerçek dünya özelliği içeriğin yayınlandığı gün havanın güneşli mi yoksa bulutlu mu olduğuyla ilgilenmektedir. Sonuç olarak, çalışmamızda metin madenciliği konu kapsamında bulunan \emph{metinsel} ve \emph{anlamsal} özelliklerini kullandık.
@@ -221,14 +221,14 @@ Deney sonrasında çıkan sonuçlar Tablo \ref{prf1_lc}'de gösterildiği gibi o
 	\label{test_result_lc}
 	\centering
 	\begin{tabular}{|c|c|}
-		\hline 
-		Gerçek Pozitif & 33 \\ 
-		\hline 
-		Yanlış Pozitif & 8 \\ 
-		\hline 
-		Yanlıi Negatif & 15 \\ 
-		\hline 
-	\end{tabular} 
+		\hline
+		Gerçek Pozitif & 33 \\
+		\hline
+		Yanlış Pozitif & 8 \\
+		\hline
+		Yanlıi Negatif & 15 \\
+		\hline
+	\end{tabular}
 \end{table}
 %%%%%%%%%%%%	LOWER CASE TEST RESULTS		%%%%%%%%%%%%
 %%%%%%%%%%%%	LOWER CASE P R F1		%%%%%%%%%%%%
@@ -249,21 +249,22 @@ Deney sonrasında çıkan sonuçlar Tablo \ref{prf1_lc}'de gösterildiği gibi o
 
 %%%%%%%%%%%%	LOWER CASE P R F1		%%%%%%%%%%%%
 
- As mentioned before, we opted to convert our dataset to lowercase for the experiments. However, this lead DBpedia Spotlight tool to miss person information, while not having an impact on location or organization information. To eliminate this error, we reverted our dataset back to sentence case (unaltered case) and ran the tests again. Results are shown in Table \ref{test_result_sc} and \ref{prf1_sc} and are improved from lowercase dataset tests by a noticeable margin.
+Yukarıda da belirttiğimiz üzere veri kümemizi deneyleri yapmadan önce küçük harfe çevirmiştik.
+Ancak DBSpotlight aracının küçük harfe karşı duyarlı olduğunu ve küçük harfe çevrilen veri kümelerinde kişi bilgisini kaçırmaya başladığını fark ettik. Küçük harf kullanılmasının yer ve kurum bilgisine bir etkisi olmadığı da belirtilmelidir. Bu hatadan kurtulmak adına veri kümemizi asıl haline geri çevirerek deneyleri bir kez daha yaptık. Tablo \ref{test_result_sc} ve \ref{prf1_sc}'de gösterilen sonuçlar ışığında değiştirilmemiş harf senaryosunda çok daha iyi sonuçlar alındığını söyleyebiliriz.
 %%%%%%%%%%%%	Sentence CASE TEST RESULTS		%%%%%%%%%%%%
 \begin{table}[!t]
 	\caption{Test Results for Sentence Case dataset}
 	\label{test_result_sc}
 	\centering
 	\begin{tabular}{|c|c|}
-		\hline 
-		True Positive & 36 \\ 
-		\hline 
-		False Positive & 7 \\ 
-		\hline 
-		False Negative & 12 \\ 
-		\hline 
-	\end{tabular} 
+		\hline
+		True Positive & 36 \\
+		\hline
+		False Positive & 7 \\
+		\hline
+		False Negative & 12 \\
+		\hline
+	\end{tabular}
 \end{table}
 %%%%%%%%%%%%	Sentence CASE TEST RESULTS		%%%%%%%%%%%%
 %%%%%%%%%%%%	Sentence CASE P R F1		%%%%%%%%%%%%
@@ -311,7 +312,7 @@ Bu çalışmada, haber makalelerinin olası popüleritelerini, henüz yayınlanm
 % The subfigure \label commands are set within each subfloat command,
 % and the \label for the overall figure must come after \caption.
 % \hfil is used as a separator to get equal spacing.
-% Watch out that the combined width of all the subfigures on a 
+% Watch out that the combined width of all the subfigures on a
 % line do not exceed the text width or a line break will occur.
 %
 %\begin{figure*}[!t]
@@ -330,7 +331,7 @@ Bu çalışmada, haber makalelerinin olası popüleritelerini, henüz yayınlanm
 % reference/describe all of them (a), (b), etc., within the main caption.
 
 
-% An example of a floating table. Note that, for IEEE style tables, the 
+% An example of a floating table. Note that, for IEEE style tables, the
 % \caption command should come BEFORE the table. Table text will default to
 % \footnotesize as IEEE normally uses this smaller font for tables.
 % The \label must come after \caption as always.
