@@ -210,7 +210,7 @@ Anlamsal özellik için DBPedia-Spotlight \cite{isem2013daiber} aracını kullan
 \section{Deney Kurulumu}
 EkşiSözlük.com'un bir API sağlamadığından daha önce de bahsetmiştik. Bu sebeple üzerinde konuşulan haberleri elle seçmemiz gerekti. Sitede konuşulan haberlerden oluşan kümemizi oluşturduktan sonra, haber metinlerini Milliyet.com'dan seçerek çıkardık ve aylara göre düzenledik. Bu aşamadan sonra en yaygın 200 kelimeyi bulduk ve 'MostCommonTerms' dosyasına yazdık. Sonrasında oluşturduğumuz 'TermFrequencies' dosyasına metinsel özelliklerden bulduğumuz sonuçları yazdık. DBpedia Spotlight aracını kullanarak, 'SemanticVariables' dosyasını her ay için ayrı ayrı çok izlekli bir yöntem izleyerek doldurduk. 3 çıktı dosyası kullanarak 'TreeData' dosyalarını oluşturduk ve bu dosyaları alıştırma ve sına adımları için kullanarak 'TreeData' ve 'TestTreeData' dosyalarını oluşturduk. Son olarak bu dosyalar ile Random Forest algoritmasını çalıştırdık ve F1 skorumuzu ve doğruluk hesabımızı yaptık.
 
-\section{Sonuçlar}
+\section{Bulgular}
 
 Deney sonrasında çıkan sonuçlar Tablo \ref{prf1_lc}'de gösterildiği gibi olup Bandari ve arkadaşlarının bulduğu 0.8'lik kesinlik sonucuna yaklaşması açısında umut vericidir \cite{bandari_pulse_2012}.
 
@@ -238,11 +238,11 @@ Deney sonrasında çıkan sonuçlar Tablo \ref{prf1_lc}'de gösterildiği gibi o
 	\centering
 	\begin{tabular}{|c|c|}
 		\hline
-		Precision & 0.80 \\
+		Kesinlik & 0.80 \\
 		\hline
-		Recall & 0.69 \\
+		Geri Çağırma & 0.69 \\
 		\hline
-		F1 Score & 0.74 \\
+		F1 Puanı & 0.74 \\
 		\hline
 	\end{tabular}
 \end{table}
@@ -274,18 +274,18 @@ Ancak DBSpotlight aracının küçük harfe karşı duyarlı olduğunu ve küç�
 	\centering
 	\begin{tabular}{|c|c|}
 		\hline
-		Precision & 0.83 \\
+		Kesinlik & 0.83 \\
 		\hline
-		Recall & 0.75 \\
+		Geri Çağırma & 0.75 \\
 		\hline
-		F1 Score & 0.79 \\
+		F1 Puanı & 0.79 \\
 		\hline
 	\end{tabular}
 \end{table}
 
 %%%%%%%%%%%%	Sentence CASE TEST RESULTS		%%%%%%%%%%%%
 
-\section{Conclusion}
+\section{Sonuç}
 Bu çalışmada, haber makalelerinin olası popüleritelerini, henüz yayınlanmadan tahmin etmeyi amaçladık. Bu amaçla verileri topladık ve bu konuda daha önce yapılmış araştırmalara göre özellik setini çıkardık. Algoritma adımlarını işlettikten sonra popüleritesi yanlış tahmin edilmiş makalelere göz attık. Bizim yöntemimize göre popüler olarak etiketlenmiş fakat ekşi sözlükte özel olarak başlığı açılmamış makalelerin, aslında gerçekten popüler olduğu, fakat başlığı açılmadan makalede yer alan kişi veya kurumların başlıklarında konunun tartışıldığını gözlemledik. Makalelerin yanlış pozitif olarak etiketlenmelerinin bir başka sebebi ise, makalede bir çok popüler terim/kişi/kurum geçmesine rağmen içeriklerin boş olmasıydı (Tık Tuzağı).
 
 % An example of a floating figure using the graphicx package.

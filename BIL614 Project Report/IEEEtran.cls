@@ -1631,17 +1631,17 @@
 
 
 % V1.7 provide string macros as article.cls does
-\def\contentsname{Contents}
+\def\contentsname{İçerik}
 \def\listfigurename{List of Figures}
 \def\listtablename{List of Tables}
-\def\refname{References}
+\def\refname{Kaynakça}
 \def\indexname{Index}
 \def\figurename{Fig.}
-\def\tablename{TABLE}
+\def\tablename{TABLO}
 \@IEEEcompsocconfonly{\def\figurename{Figure}\def\tablename{Table}}
 \def\partname{Part}
 \def\appendixname{Appendix}
-\def\abstractname{Abstract}
+\def\abstractname{Özet}
 % IEEE specific names
 \def\IEEEkeywordsname{Index Terms}
 \def\IEEEproofname{Proof}
